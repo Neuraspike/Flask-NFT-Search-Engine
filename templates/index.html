@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- title of the project -->
+    <title>Image Search Engine</title>
+
+    <!-- stylesheets -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+          crossorigin="anonymous">
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+
+</head>
+<body>
+    <div class="container my-3">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center mb-5">NFT Search Engine</h1>
+            </div>
+
+            <!-- Display the query image -->
+            <div class="col-md-6 col-12 mb-3 mx-auto">
+                <div class="card">
+                    <form method="POST" enctype="multipart/form-data" class="p-3">
+                        <div class="form-row">
+                            <div class="col-12 mb-3">
+                                <label for="uploadImage">Upload an Image</label>
+                                <input type="file"
+                                       name="query-image"
+                                       class="form-control h-auto"
+                                       id="uploadImage"
+                                       required>
+                            </div>
+
+                            <div class="col-12 text-center">
+                                <button type="submit"
+                                        class="btn submit-button">
+                                             Submit
+                                </button>
+                            </div>
+
+                            {% if query_image_path %}
+                                <div class="col-12 mt-3 text-center">
+                                    <img src="{{ query_image_path }}"
+                                         width="250px"
+                                         alt="image"
+                                         class="img-fluid">
+                                </div>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Display the results based on the queried image -->
+        <div class="row">
+            {% if output %}
+                <div class="col-12 mb-3">
+                    <h2 class="text-center">Results</h2>
+                </div>
+            {% endif %}
+
+            {% for (score, path_to_image) in output %}
+                <div class="col-12 mb-3">
+                    <div class="card">
+                        <div class="row">
+                            <div class="col-md-5 mb-3">
+                                <img src="{{ path_to_image }}"
+                                     height="200px"
+                                     alt="image"
+                                     class="img-fluid rounded">
+                            </div>
+
+                            <div class="col-md-7">
+                                <h4>Score: <b>{{ score }}</b></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

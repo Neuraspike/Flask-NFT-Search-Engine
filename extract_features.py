@@ -16,35 +16,37 @@ args = vars(ap.parse_args())
 
 # grab the list of images that we'll be describing
 print("[INFO] loading images...")
-imagePaths = ns.load_images_from_folder(args["dataset"])
+image_paths = ns.load_images_from_folder(args["dataset"])
 
 # initialized the features matrix and labels
 features = []
 labels = []
 
 # loop over the input images
-for imagePath in imagePaths:
+for image_path in image_paths:
     # load the image from the dataset folder and extract the class
     # labels from the filename. Suppose the path is described as
     # ./dataset/{Class name}.{image number}.jpg
-    image = cv2.imread(imagePath)
-    imageID = ns.extract_filename(imagePath)
+    image = cv2.imread(image_path)
+    image_id = ns.extract_filename(image_path)
 
-    # extract the colors in the histogram that explains the distribution of colors
-    # within each pixels in all the images within the dataset
+    # extract the colors in the histogram that explains the distribution
+    # of colors within each pixel in all the images within the dataset
     histogram = ns.extract_color_histogram(image)
     histogram = histogram.tolist()
 
     # save the histogram along with the image name
     features.append(histogram)
-    labels.append(imageID)
+    labels.append(image_id)
 
 # open the output CSV file for writing
 csv_writer = open(args["index"], "w")
 
-for (imageID, image) in zip(labels, features):
-    featureVector = ",".join([str(data) for data in image])
-    csv_writer.write("{},{}\n".format(imageID, featureVector))
+# iterate through the labels & features then store the
+# output in a CSV file
+for (image_id, image) in zip(labels, features):
+    feature = ",".join([str(data) for data in image])
+    csv_writer.write("{},{}\n".format(image_id, feature))
 
 # close the CSV file
 print("[INFO] saving features and model...")
